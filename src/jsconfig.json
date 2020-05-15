@@ -1,0 +1,6 @@
+/*  프로젝트에서 자동import 기능이 제대로 작동할 수 있게*/
+{
+    "compilerOptions": {
+        "target": "es6"
+    }
+}
