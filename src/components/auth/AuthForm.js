@@ -51,27 +51,60 @@ const ButtonWithMarginTop = styled(Button)`
   margin-top: 1rem;
 `;
 
-const AuthForm = () => {
+// type props에 따라 다른 내용을 보여주기
+const textMap = {
+  login: 'LOGIN',
+  register: 'REGISTER',
+};
+
+const AuthForm = ({ type, form, onChange, onSubmit }) => {
+  console.log('AuthForm - type ::', type);
+  console.log('AuthForm - form ::', form);
+  console.log('AuthForm - onChange ::', onChange);
+  console.log('AuthForm - onSubmit ::', onSubmit);
+  const text = textMap[type];
   return (
     <AuthFormBlock>
-      <h3>LOGIN</h3>
-      <form>
+      <h3>{text}</h3>
+      <form onSubmit={onSubmit}>
         <StyledInput
           autoComplete="username"
           name="username"
           placeholder="id.."
+          onChange={onChange}
+          value={form.username} //auth.js에있는 username
         />
         <StyledInput
           autoComplete="new-password"
           name="password"
           placeholder="password.."
+          onChange={onChange}
+          value={form.password}
         />
+        {type === 'register' && (
+          <StyledInput
+            autoComplete="new-password"
+            name="passwordConfirm"
+            placeholder="password check"
+            type="password"
+            onChange={onChange}
+            value={form.passwordConfirm}
+          />
+        )}
+
         <ButtonWithMarginTop cyan fullWidth>
-          LOG-IN
+          {text}
         </ButtonWithMarginTop>
       </form>
       <Footer>
-        <Link to="/register">JOIN</Link>
+        {type === 'login' ? (
+          <Link to="/register">
+            {' '}
+            you don't have an account? ▶&nbsp; REGISTER
+          </Link>
+        ) : (
+          <Link to="/login">LOGIN</Link>
+        )}
       </Footer>
     </AuthFormBlock>
   );
