@@ -1,6 +1,6 @@
 /* common 디렉토리는 여기저기서 재사용되는 컴포넌트를 모아놓음 */
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palette';
 
 const StyledButton = styled.button`
@@ -17,6 +17,24 @@ const StyledButton = styled.button`
   &:hover {
     background: ${palette.gray[6]};
   }
+  ${(props) =>
+    props.fullWidth &&
+    css`
+/* 로그인 버튼에 밝은 파란색을 넣어주고 width는 100%*/
+padding-top:0.75rem;
+padding-bottom:0.75rem;
+width:100%
+font-size:1.125rem;
+`}
+
+  ${(props) =>
+    props.cyan &&
+    css`
+      background: ${palette.cyan[5]};
+      &:hover {
+        background: ${palette.cyan[4]};
+      }
+    `}
 `;
 
 const Button = (props) => <StyledButton {...props} />;
