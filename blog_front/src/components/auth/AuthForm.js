@@ -58,8 +58,10 @@ const textMap = {
 };
 
 const AuthForm = ({ type, form, onChange, onSubmit }) => {
+  console.log('----------------- auth form 호출');
   console.log('AuthForm - type ::', type);
   console.log('AuthForm - form ::', form);
+  // console.log('ㄴ form.username::', form.username);
   console.log('AuthForm - onChange ::', onChange);
   console.log('AuthForm - onSubmit ::', onSubmit);
   const text = textMap[type];
@@ -77,6 +79,7 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
         <StyledInput
           autoComplete="new-password"
           name="password"
+          type="password"
           placeholder="password.."
           onChange={onChange}
           value={form.password}
