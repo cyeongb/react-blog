@@ -1,6 +1,6 @@
 const Koa = require('koa'); // koa 가져온다.
 const Router = require('koa-router'); //koa-router모듈을 불러온다
-const api = require('./api');
+const api = require('./api'); // ** require 메서드는 export 한 걸 가져올 수 있다.
 const bodyParser = require('koa-bodyparser');
 const app = new Koa();
 const router = new Router();

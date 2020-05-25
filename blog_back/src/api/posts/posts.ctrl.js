@@ -36,15 +36,21 @@ exports.read = (ctx) => {
 
   // 파라미터로 받아온 값은 문자열 형식이므로  비교할 p.id값을 문자열로 비교한다.
   const post = posts.find((p) => p.id.toString() === id);
+  console.log('p.id.toString>>', p.id.toString);
+  console.log('id>>', id);
 
   //포스트가 없으면 에러 반환
   if (!post) {
+    console.log('post 없음');
+
     ctx.status = 404;
     ctx.body = {
       message: 'post is not exist',
     };
     return;
   }
+  console.log('post 있음');
+
   ctx.body = post;
 };
 
@@ -81,6 +87,8 @@ exports.replace = (ctx) => {
     };
     return;
   }
+  console.log('posts[index]>>', posts[index]);
+
   // post가 해당id로 조회가 되면, id를 제외한 정보를 날리고 객체를 새로 만든다.
   posts[index] = {
     //posts 배열의 index번째 객체에
@@ -90,9 +98,22 @@ exports.replace = (ctx) => {
   ctx.body = posts[index]; //위에 데이터를 담은  해당 index번째의 posts 배열을 ctx.body에 담는다.
 };
 
-
 // 포스트 수정(patch)
 // patch 메서드는 주어진 필드만 교체한다.
-exports.update = ctx =>{
-    
-}
+exports.update = (ctx) => {
+  const { id } = ctx.params;
+  const index = posts.findIndex((p) => p.id.toString() === id);
+  if (index === -1) {
+    ctx.status = 404;
+    ctx.body = {
+      message: 'post is not exist',
+    };
+    return;
+  }
+  log('posts[index]>>', posts[index]);
+  posts[index] = {
+    ...posts[index],
+    ...ctx.request.body,
+  };
+  ctx.body = posts[index];
+};
