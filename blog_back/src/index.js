@@ -1,11 +1,15 @@
 const Koa = require('koa'); // koa 가져온다.
 const Router = require('koa-router'); //koa-router모듈을 불러온다
 const api = require('./api');
-
+const bodyParser = require('koa-bodyparser');
 const app = new Koa();
 const router = new Router();
 
+// /api 경로로 route를 불러온다
 router.use('/api', api.routes());
+
+// 라우터를 적용하기 전에 bodyParser를 적용한다.
+app.use(bodyParser());
 
 // app 인스턴스에 라우터 적용
 app.use(router.routes()).use(router.allowedMethods());
