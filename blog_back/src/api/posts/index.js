@@ -1,6 +1,8 @@
-const Router = require('koa-router');
+import Router from 'koa-router';
+import * as postsCtrl from './posts.ctrl';
+//import { list, write, read, remove, replace, update } from './posts.ctrl'; //posts.ctrl 에서 export 한 것들을 require 함수로 가져옴
+
 const posts = new Router();
-const postsCtrl = require('./posts.ctrl'); //posts.ctrl 에서 export 한 것들을 require 함수로 가져옴
 
 const printInfo = (ctx) => {
   ctx.body = {
@@ -17,4 +19,5 @@ posts.get('/:id', postsCtrl.read);
 posts.delete('/:id', postsCtrl.remove);
 posts.put('/:id', postsCtrl.replace);
 posts.patch('/:id', postsCtrl.update);
-module.exports = posts;
+
+export default posts;
