@@ -31,6 +31,8 @@ export const write = async (ctx) => {
     tags: Joi.array().items(Joi.string()).required(),
   });
 
+  /*export function validate<T, R>(value: T, schema: SchemaLike, callback: (err: ValidationError, value: T) => R): R;
+    ---> joi API를 타고 가다보면 joi와 error 클래스를 상속받아 error 객체를 선언하지 않고도 사용할 수 있다. */
   const result = Joi.validate(ctx.request.body, schema);
   if (result.error) {
     ctx.status = 400; //bad request
@@ -49,7 +51,7 @@ export const write = async (ctx) => {
 
   try {
     console.log('posts.ctrl.js - write() 호출');
-    log('title>>', title);
+    console.log('title>>', title);
     await post.save(); // 인스턴스를 만들고 save() 함수를 실행시켜야 디비에 저장이 된다.
     // 함수의 반환값은 promise 이므로 async/await 문법으로 디비 저장 요청이 완료 될때 까지 await를 사용해서 대기할 수 있다.
     //그리고 await를 사용하려면 함수 선언 부분에 async 를 붙여야 한다. 그리고 try/catch 문으로 오류를 처리해야 한다.
@@ -62,12 +64,35 @@ export const write = async (ctx) => {
 
 // -------------------------------------- LIST
 export const list = async (ctx) => {
+  const page = parseInt(ctx.query.page || '1', 10); // query는 문자열이라서 숫자로 변환해야함. 값이 없다면(페이지가 없다면) 1을 기본으로 사용한다.
+  console.log('page >>', page);
+  if (page < 1) {
+    ctx.status = 400;
+    console.log('페이지 없음 >>', ctx.status);
+    return;
+  }
   try {
     console.log('posts.ctrl.js - list() 호출');
-    const posts = await Post.find().exec(); // find() 함수를 호출하고 나서 exec() 함수를 호출 해야 서버에 쿼리를 요청한다.
+    const posts = await Post.find()
+      .lean() //lean() 함수를 쓰면 처음부터 데이터를 json 형태로 들고온다.
+      .skip() //skip 함수에 skip(10) 을 하면 1~10을  제외한 그 다음 데이터를 불러온다.
+      .limit(10) //한번에 보이는 개수를 10개로 제한하기
+      .sort({ _id: -1 }) // sort함수의 파라미터는 key:1 형식으로 넣는데 key는 정렬할 필드를 의미하며 1:오름차순 -1:내림차순 으로 정렬한다.
+      .exec(); // find() 함수를 호출하고 나서 exec() 함수를 호출 해야 서버에 쿼리를 요청한다.
     console.log('list 에 posts >>', posts);
 
-    ctx.body = posts;
+    const postCount = await Post.countDocuments().exec();
+    ctx.set('Last_page', Math.ceil(postCount / 10)); //math.ceit : 소수점 이하를 올림한다.
+
+    console.log('post 갯수>>', postCount);
+
+    ctx.body = posts //ctx.body 에 post내용을 담음
+      //.map((post) => post.toJSON()) //posts 데이터를 json으로 '직렬화' 시킨다. lean() 함수를 사용하지 않았을 때 이  변환과정이 필요하다.
+      .map((post) => ({
+        ...post, // 직렬화 시킨 post 데이터 펼치기
+        body:
+          post.body.length < 150 ? post.body : `${post.body.slice(0, 150)}...`, //글의 길이가 200 미만이면 그대로 하고, 150 이상이면 0~200까지 자르고 그 뒤를 ... 으로 대체한다.
+      }));
   } catch (e) {
     console.log('posts.ctrl.js - list error >>', e);
     ctx.throw(500, e);
@@ -118,12 +143,29 @@ export const remove = async (ctx) => {
 export const update = async (ctx) => {
   const { id } = ctx.params;
 
+  const schema = Joi.object().keys({
+    title: Joi.string(),
+    body: Joi.string(),
+    tags: Joi.array().items(Joi.string()),
+  });
+
+  const result = Joi.validate(ctx.request.body, schema);
+  if (result.error) {
+    console.log('400 에러 ! >>', result.error);
+
+    ctx.status = 400; //잘못된 요청
+    ctx.body = result.error;
+    return;
+  }
+
   try {
     const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
       new: true, // true 로 하면 업데이트된 후의 데이터를 반환한다. false는 업데이트 되기 전의 데이터를 반환한다.
     }).exec();
     console.log('posts.ctrl.js - update() 호출');
     console.log('id >>', id);
+    console.log('schema >>', schema);
+    console.log('result >>', result);
 
     if (!post) {
       console.log('post 없음');

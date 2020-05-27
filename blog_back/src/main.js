@@ -9,7 +9,7 @@ import Router from 'koa-router'; //koa-router모듈을 불러온다
 //import { routes } from './api'; // ** require 메서드는 export 한 걸 가져올 수 있다.
 import bodyParser from 'koa-bodyparser';
 import api from './api';
-
+//import createFakeData from './createFakeData';
 const app = new Koa();
 const router = new Router();
 // node.js에서 환경변수는 process.env로 조회 가능하다.
@@ -20,9 +20,11 @@ mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => {
     console.log('###### mongoDB에 연결함 ########');
+    //createFakeData(); //디비가 연결 되면 fake data를 불러온다.
   })
   .catch((e) => {
     console.log('mongoDB연결하다가 에러남>>', e);
+    console.error(e);
   });
 
 // /api 경로로 route를 불러온다
