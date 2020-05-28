@@ -59,8 +59,17 @@ export const register = async (ctx) => {
     console.log(' db에 저장함');
 
     ctx.body = user.serialize(); //body 에 json 으로 직렬화를 거친 data 를 뿌리기위해 해당 메서드 호출
+
+    // ---------- 토큰 생성
+    const token = user.gerateToken();
+    console.log('token 생성 >>', token);
+
+    ctx.cookies.set('access_token', token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7, //7일
+      httpOnly: true,
+    });
   } catch (e) {
-    console.log(e);
+    console.log('auth.ctrl.js user에 에러>>', e);
     ctx.throw(500, e);
   }
 };
@@ -92,6 +101,13 @@ export const login = async (ctx) => {
     }
 
     ctx.body = user.serialize();
+
+    const token = user.gerateToken();
+    console.log('token 생성>>', token);
+    ctx.cookies.set('access_token', token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      httpOnly: true,
+    });
   } catch (e) {
     console.log('login 에러 >>', e);
     ctx.throw(500, e);

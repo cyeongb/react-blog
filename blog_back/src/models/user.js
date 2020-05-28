@@ -1,10 +1,29 @@
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const UserSchema = new Schema({
   username: String,
   hashedPassword: String,
 });
+
+// ================ tocken 값에 대한 서명을 한다.
+UserSchema.methods.generateToken = function () {
+  console.log('----------generateToken function 호출----------');
+
+  const token = jwt.sign(
+    // 첫번째 파라미터에는 토큰안에 넣고싶은 데이터를 넣는다.
+    {
+      _id: this.id,
+      username: this.username,
+    },
+    process.env.JWT_SECRET, // 두번째 파라미터에는 jwt 암호를 넣는다.
+    {
+      expiresIn: '7d', // 7일 동안 토큰이 유효하다.
+    },
+  );
+  return token;
+};
 
 // ---------- 비번 hash 설정하기
 // setPassword 를 통해서 password값을 파라미터로 받아서 계정의 hashedPassword 값을 설정 해 준다.
