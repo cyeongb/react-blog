@@ -10,6 +10,8 @@ import Router from 'koa-router'; //koa-router모듈을 불러온다
 import bodyParser from 'koa-bodyparser';
 import api from './api';
 //import createFakeData from './createFakeData';
+import jwtMiddleware from './lib/jwtMiddleware';
+
 const app = new Koa();
 const router = new Router();
 // node.js에서 환경변수는 process.env로 조회 가능하다.
@@ -32,6 +34,9 @@ router.use('/api', api.routes());
 
 // 라우터를 적용하기 전에 bodyParser를 적용한다.
 app.use(bodyParser());
+
+//jwtmiddleware은 app에 router미들웨어가 적용되기 전에 이루어 져야한다. 그래서 밑에 router 연결 보다 위에 위치함.
+app.use(jwtMiddleware);
 
 // app 인스턴스에 라우터 적용
 app.use(router.routes()).use(router.allowedMethods());
