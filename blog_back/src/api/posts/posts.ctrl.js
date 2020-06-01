@@ -47,6 +47,7 @@ export const write = async (ctx) => {
     title,
     body,
     tags,
+    user: ctx.state.user, // 포스트를 작성할 때 사용자 정보를 넣어서 디비에 저장하도록 구현.
   });
 
   try {
