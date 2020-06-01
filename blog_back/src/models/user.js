@@ -19,7 +19,7 @@ UserSchema.methods.generateToken = function () {
     },
     process.env.JWT_SECRET, // 두번째 파라미터에는 jwt 암호를 넣는다.
     {
-      expiresIn: '7d', // 7일 동안 토큰이 유효하다.
+      expiresIn: '11d', // 7일 동안 토큰이 유효하다.
     },
   );
   return token;

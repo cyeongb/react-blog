@@ -76,7 +76,7 @@ export const register = async (ctx) => {
 
 // ------------------- 로그인
 export const login = async (ctx) => {
-  const { username, password } = ctx.reqiest.body;
+  const { username, password } = ctx.request.body;
 
   if (!username || !password) {
     console.log('username 이나 password 없음');
@@ -132,4 +132,9 @@ export const check = async (ctx) => {
 };
 
 // -------------------------- 로그아웃
-export const logout = async (ctx) => {};
+// -- 로그아웃은 cookie에 저장된 데이터만 지워주면 된다
+export const logout = async (ctx) => {
+  ctx.cookies.set('access_token');
+  ctx.status = 204;
+  console.log('로그아웃해서 글 없음');
+};
