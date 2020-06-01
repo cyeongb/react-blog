@@ -10,7 +10,7 @@ import { Provider } from 'react-redux'; // provider를 통한 리덕스 적용
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer, { rootSaga } from './modules';
-import createSagaMiddleWare from 'redux-saga'; */
+import createSagaMiddleWare from 'redux-saga';
 
 const sagaMiddleWare = createSagaMiddleWare();
 
@@ -31,5 +31,3 @@ ReactDOM.render(
 );
 
 serviceWorker.unregister();
-
-

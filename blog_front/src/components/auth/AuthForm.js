@@ -77,7 +77,7 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
           value={form.username} //auth.js에있는 username
         />
         <StyledInput
-          autoComplete="new-password"
+          autoComplete="newpassword"
           name="password"
           type="password"
           placeholder="password.."
