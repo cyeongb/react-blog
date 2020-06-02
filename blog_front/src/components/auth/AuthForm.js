@@ -59,6 +59,7 @@ const textMap = {
 
 const AuthForm = ({ type, form, onChange, onSubmit }) => {
   console.log('----------------- auth form 호출');
+
   console.log('AuthForm - type ::', type);
   console.log('AuthForm - form ::', form);
   // console.log('ㄴ form.username::', form.username);
@@ -101,10 +102,7 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
       </form>
       <Footer>
         {type === 'login' ? (
-          <Link to="/register">
-            {' '}
-            you don't have an account? ▶&nbsp; REGISTER
-          </Link>
+          <Link to="/register">REGISTER</Link>
         ) : (
           <Link to="/login">LOGIN</Link>
         )}

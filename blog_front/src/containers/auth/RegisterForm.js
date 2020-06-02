@@ -42,7 +42,7 @@ const RegisterForm = () => {
       console.log('password:', password, 'password check:', passwordConfirm);
       return; //오류처리
     }
-    dispatch(register({ username, password })); //이름, password를 register에 전달함
+    dispatch(register({ username, password })); //username, password를 register에 전달함
   };
 
   //컴포넌트가 처음 렌더링 될 때 form 을 초기화한다.
@@ -50,6 +50,7 @@ const RegisterForm = () => {
   // 처음 렌더링 될때만 초기화가 되지 두번째 세번째 렌더링 하면 호출되지 않는다.
   // -------- useEffect에 넣어 준 함수는 auth , authError값에 따라서 다른 작업을 한다.
   useEffect(() => {
+    //  dispatch(initializeForm('register'));
     // 회원가입 성공,실패 처리하기
     if (authError) {
       console.log(' RegisterFoem _회원가입 실패 auth error>>', authError);

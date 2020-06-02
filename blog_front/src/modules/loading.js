@@ -2,10 +2,9 @@
 
 import { createAction, handleActions } from 'redux-actions';
 
+// 요청을 위해서 action type을 payload로 설정. 중복방지 !
 const START_LOADING = 'loading/START_LOADING';
 const FINISH_LOADING = 'loading/FINISH_LOADING';
-
-// 요청을 위해서 action type을 payload로 설정. 중복방지 !
 
 export const startLoading = createAction(
   START_LOADING,
