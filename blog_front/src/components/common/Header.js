@@ -40,7 +40,7 @@ const UserInfo = styled.div`
   margin-right: 1rem;
 `;
 
-const Header = ({ user }) => {
+const Header = ({ user, onLogout }) => {
   console.log('헤더에 user.usename값 잘 들고오나 >>', user.username);
 
   return (
@@ -55,7 +55,7 @@ const Header = ({ user }) => {
           {user ? (
             <div className="right">
               <UserInfo>{user.username}</UserInfo>
-              <Button> L o g o u t </Button>
+              <Button onClick={onLogout}> L o g o u t </Button>
             </div>
           ) : (
             <div className="right">

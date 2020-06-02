@@ -1,5 +1,5 @@
 import React from 'react';
-import HeaderContainer from '../components/common/HeaderContainer';
+import HeaderContainer from '../containers/common/HeaderContainer';
 
 const PostListPage = () => {
   console.log('-----------------post list page@@--------------------');
