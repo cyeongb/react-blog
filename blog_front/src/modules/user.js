@@ -1,6 +1,6 @@
 /* 사용자의 상태를 담을 user라는 리덕스 모듈*/
 
-import { cerateAction, handleActions, createAction } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import { takeLatest } from 'redux-saga/effects';
 import * as authAPI from '../lib/api/auth';
 import createRequestSaga, {

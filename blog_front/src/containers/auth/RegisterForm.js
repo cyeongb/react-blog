@@ -84,8 +84,22 @@ const RegisterForm = ({ history }) => {
   // user값이 잘 설정되었는지 확인
   useEffect(() => {
     if (user) {
-      console.log('RegisterForm _ checkAPI 성공>>', user);
+      console.log('user이므로 바로 글목록 이동함>', user);
       history.push('/'); //가입 후 홈화면으로 이동
+
+      try {
+        console.log(
+          'RegisterForm - 사용자이므로 user을 string으로 변환시켜서 storage에 담는다.',
+        );
+        // 회원가입(로그인도)을 하면 사용자 정보를 localstorage에 저장하도록 작업함.
+        // 왜냐면 페이지를 새로고침했을 때도 로그인이 된 상태를 유지하려면, 리액트앱이 브라우저에서 맨 처음 렌더링될 때 localstorage에서 값을 불러와서
+        // 리덕스 스토어 안에 넣도록 구현해 주어야 한다.
+        // 해당 작업은  App  컴포넌트에서 useEffect로 작업을 하거나 클래스형으로 componentDidMount로 처리해도 되는데(둘 다 렌더링이 된 후에 실행된다.) 깜빡임 현상이 나타날 수 있어서
+        // 여기서는 index.js에서 처리하겠음.
+        localStorage.setItem('user', JSON.stringify(user));
+      } catch (e) {
+        console.log('register 에서 localStorage에서 에러>', e);
+      }
     }
   }, [user, history]);
 

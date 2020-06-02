@@ -60,8 +60,14 @@ const LoginForm = ({ history }) => {
 
   useEffect(() => {
     if (user) {
+      console.log('user이므로 바로 글목록 이동함>', user);
+
       history.push('/'); // 사용자이면 바로 글목록으로 이동한다.
       try {
+        console.log(
+          'LoginForm - 사용자이므로 user을 string으로 변환시켜서 storage에 담는다.',
+        );
+
         localStorage.setItem('user', JSON.stringify(user));
       } catch (e) {
         console.log('localstorage 에서 에러 >', e);
