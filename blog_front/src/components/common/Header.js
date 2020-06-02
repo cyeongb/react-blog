@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Responsive from './Responsive';
 import Button from './Button';
+import { Link } from 'react-router-dom';
 
 const HeaderBlock = styled.div`
   position: fixed; /* 헤더가 항상 상단에 떠 있도록 fixed로 설정. */
@@ -33,19 +34,34 @@ const Spacer = styled.div`
   height: 7rem;
 `;
 
-const Header = () => {
+// user 값이 있을 경우 계정명을 보여주고 로그인을 로그아웃으로 보여주도록 수정.
+const UserInfo = styled.div`
+  font-weight: 800;
+  margin-right: 1rem;
+`;
+
+const Header = ({ user }) => {
+  console.log('헤더에 user.usename값 잘 들고오나 >>', user.username);
+
   return (
     <>
       <HeaderBlock>
         <Wrapper>
-          <div className="logo">
+          <Link to="/" className="logo">
             R e a c t &nbsp; W o r l d
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </div>
+          </Link>
           &nbsp;
-          <div className="right">
-            <Button> L o g i n</Button>
-          </div>
+          {user ? (
+            <div className="right">
+              <UserInfo>{user.username}</UserInfo>
+              <Button> L o g o u t </Button>
+            </div>
+          ) : (
+            <div className="right">
+              <Button to="/login"> L o g i n</Button>
+            </div>
+          )}
         </Wrapper>
       </HeaderBlock>
       <Spacer /* headerblock의 position이 fixed이면 헤더 컴포넌트 하단에 나오는 내용이 헤더와 겹치기 때문에 spacer로 헤더 크기만큼 공간을 차지하게 함. */
