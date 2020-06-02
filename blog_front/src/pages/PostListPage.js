@@ -1,14 +1,13 @@
 import React from 'react';
-import Button from '../components/common/Button';
+import Header from '../components/common/Header';
 
 const PostListPage = () => {
   console.log('-----------------post list page@@--------------------');
   return (
-    <div>
-      <h1>Post List Page</h1>
-      <br />
-      <Button>BUTTON</Button>
-    </div>
+    <>
+      <Header />
+      <div>Hello React</div>
+    </>
   );
 };
 

@@ -57,7 +57,16 @@ const textMap = {
   register: 'REGISTER',
 };
 
-const AuthForm = ({ type, form, onChange, onSubmit }) => {
+// 에러 보여주기
+
+const ErrorMessage = styled.div`
+  color: darksalmon;
+  text-align: center;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+`;
+
+const AuthForm = ({ type, form, onChange, onSubmit, error }) => {
   console.log('----------------- auth form 호출');
 
   console.log('AuthForm - type ::', type);
@@ -95,16 +104,16 @@ const AuthForm = ({ type, form, onChange, onSubmit }) => {
             value={form.passwordConfirm}
           />
         )}
-
-        <ButtonWithMarginTop cyan fullWidth>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <ButtonWithMarginTop cyan fullWidth style={{ marginTop: '1rem' }}>
           {text}
         </ButtonWithMarginTop>
       </form>
       <Footer>
         {type === 'login' ? (
-          <Link to="/register">REGISTER</Link>
+          <Link to="/register"> R E G I S T E R </Link>
         ) : (
-          <Link to="/login">LOGIN</Link>
+          <Link to="/login"> L O G I N </Link>
         )}
       </Footer>
     </AuthFormBlock>

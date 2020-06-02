@@ -6,8 +6,9 @@ import palette from '../../lib/styles/palette';
 const StyledButton = styled.button`
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 1.8rem;
   font-weight: bold;
+  font-family: fantasy;
   padding: 0.25rem 1rem;
   color: wheat;
   outline: none;

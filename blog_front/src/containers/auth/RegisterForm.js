@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, register } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
 import { check } from '../../modules/user';
+import { withRouter } from 'react-router-dom'; //history 객체를 사용하려면  withRouter로 컴포넌트를 감싸주면 된다.
 /*  ------------------------회원가입---------------------------*/
-const RegisterForm = () => {
+const RegisterForm = ({ history }) => {
   console.log('-----------register form 호출');
   const dispatch = useDispatch(); //useDispatch() 로 dispatch를 가져온다
-
+  const [error, setError] = useState(null);
   const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
     //useSelector는 connect의 mapStateToProps와 유사함. 값이 바뀔 때 재정의할 지 결정한다.
     form: auth.register, //form 에 auth의 register정보를 넘긴다.
@@ -33,13 +34,25 @@ const RegisterForm = () => {
   };
 
   // 폼 등록 이벤트 핸들러
-  // onSubmit 함수에서 이벤트가 발생하면, username과 password를 파라미터로 넣어서 액션을  dispatch 해 주었다.
+  // onSubmit 함수에서 이벤트가 발생하면, username , password를 파라미터로 넣어서 액션을  dispatch 해 주었다.
   const onSubmit = (e) => {
     e.preventDefault();
     const { username, password, passwordConfirm } = form;
+
+    // 하나라도 비어있으면 에러 처리 함.
+    if ([username, password, passwordConfirm].includes('')) {
+      setError('Empty is exist !');
+      return;
+    }
+
     if (password !== passwordConfirm) {
       console.log('RegisterForm _ 비밀번호 안맞음!>');
       console.log('password:', password, 'password check:', passwordConfirm);
+      setError('password is not match');
+      dispatch(changeField({ form: 'register', key: 'password', value: '' }));
+      dispatch(
+        changeField({ form: 'register', key: 'passwordConfirm', value: '' }),
+      );
       return; //오류처리
     }
     dispatch(register({ username, password })); //username, password를 register에 전달함
@@ -53,7 +66,13 @@ const RegisterForm = () => {
     //  dispatch(initializeForm('register'));
     // 회원가입 성공,실패 처리하기
     if (authError) {
-      console.log(' RegisterFoem _회원가입 실패 auth error>>', authError);
+      if (authError.response.status === 409) {
+        console.log('account is already exist !');
+        setError('account is already exist !');
+        return;
+      }
+      console.log(' RegisterForm _register FAIL>>', authError);
+      setError('register FAIL');
       return;
     }
     if (auth) {
@@ -66,8 +85,9 @@ const RegisterForm = () => {
   useEffect(() => {
     if (user) {
       console.log('RegisterForm _ checkAPI 성공>>', user);
+      history.push('/'); //가입 후 홈화면으로 이동
     }
-  }, [user]);
+  }, [user, history]);
 
   return (
     <AuthForm
@@ -75,8 +95,9 @@ const RegisterForm = () => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
+      error={error}
     />
   );
 };
 
-export default RegisterForm;
+export default withRouter(RegisterForm);

@@ -60,7 +60,7 @@ const LoginForm = ({ history }) => {
 
   useEffect(() => {
     if (user) {
-      history.push('/'); // 사용자이면 바로 목록으로 이동한다.
+      history.push('/'); // 사용자이면 바로 글목록으로 이동한다.
       try {
         localStorage.setItem('user', JSON.stringify(user));
       } catch (e) {
