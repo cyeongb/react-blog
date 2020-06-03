@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react'; // 외부 라이브러리를 연동할 때는 useRef 와 useEffect 를 사용하면 된다.
 import Quill from 'quill';
 import 'quill/dist/quill.bubble.css';
 import styled from 'styled-components';
@@ -44,16 +44,27 @@ const Editor = () => {
   useEffect(() => {
     quillInstance.current = new Quill(quillElement.current, {
       theme: 'bubble',
-      placeholder: 'fill out the conent',
+      placeholder: 'fill out the content...',
       modules: {
         // https://quilljs.com/docs/modules/toobal 에 더 많은 옵션이 있다고 함.
         toolbar: [
           [{ header: '1' }, { header: '2' }],
           ['bold', 'italic', 'underline', 'strike'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['blockquote', 'code-block', 'link', 'image'],
         ],
       },
     });
-  });
+  }, []);
+
+  return (
+    <EditorBlock>
+      <TitleInput placeholder="please insert title.." />
+      <QuillWrapper>
+        <div ref={quillElement} />
+      </QuillWrapper>
+    </EditorBlock>
+  );
 };
 
 export default Editor;
