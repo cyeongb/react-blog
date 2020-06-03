@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 
-const TabBlock = styled.div`
+const TagBoxBlock = styled.div`
   width: 100%;
   border-top: 1px solid ${palette.gray[2]};
   padding-top: 2rem;
@@ -62,13 +62,63 @@ const TagListBlock = styled.div`
 
 // React.memo 를 사용해서 tag값이 바뀔때만 리렌더링 되도록 처리함.
 // memo 는 얕은비교연산을 통해서 동일한 ref 값의 props가 들어오면 렌더링을 하지 않는다.
-const TagItem = React.memo(({ tag }) => <Tag>#{tag}</Tag>);
+const TagItem = React.memo(({ tag, onRemove }) => (
+  <Tag onClick={() => onRemove(tag)}>#{tag}</Tag>
+));
 
 //  tags 값이 바뀔때만 리렌더링 된다.
-const TagList = React.memo(({ tags }) => (
+const TagList = React.memo(({ tags, onRemove }) => (
   <TagListBlock>
     {tags.map((tag) => (
-      <TagItem key={tag} tag={tag} />
+      <TagItem key={tag} tag={tag} onRemove={onRemove} />
     ))}
   </TagListBlock>
 ));
+
+const TagBox = () => {
+  const [input, setInput] = useState('');
+  const [localTags, setLocalTags] = useState([]);
+
+  const insertTag = useCallback(
+    (tag) => {
+      if (!tag) return; // 공백이면 추가하지 않는다.
+
+      if (localTags.includes(tag)) return; //이미 tag가 있으면 추가하지 않는다.
+      setLocalTags([...localTags, tag]);
+    },
+    [localTags], // tag에 변동이 있을 떄
+  );
+
+  const onRemove = useCallback(
+    (tag) => {
+      setLocalTags(localTags.filter((t) => t !== tag)); // 선택된 태그와 기존의 것과 다른것 빼고 나머지들을 지운다. == 같은걸 지운다는 말임.
+    },
+    [localTags],
+  );
+
+  const onChange = useCallback((e) => {
+    setInput(e.target.value);
+  }, []);
+
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      insertTag(input.trim()); //trim()으로 앞 뒤 공백을 없앤 후 등록.
+      setInput(''); //input 초기화
+    },
+    [input, insertTag],
+  );
+
+  return (
+    <TagBoxBlock>
+      <h4>Tag</h4>
+      <TagForm onSubmit={onSubmit}>
+        <input placeholder="add tag!" value={input} onChange={onChange} />
+        <button type="submit">Add</button>
+      </TagForm>
+      <TagList tags={localTags} onRemove={onRemove} />
+    </TagBoxBlock>
+  );
+};
+
+export default TagBox;
