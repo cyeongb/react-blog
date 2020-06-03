@@ -2,7 +2,7 @@ import React from 'react';
 import EditorContainer from '../containers/write/EditorContainer';
 import Responsive from '../components/common/Responsive';
 import TagBox from '../components/write/TagBox';
-import WriteActionButtons from '../components/write/WriteActionButtons';
+import WriteActionButtonsContainer from '../containers/write/WriteActionButtonsContainer';
 
 /*  ------------------------글쓰기---------------------------*/
 const WritePage = () => {
@@ -12,7 +12,7 @@ const WritePage = () => {
     <Responsive>
       <EditorContainer />
       <TagBox />
-      <WriteActionButtons />
+      <WriteActionButtonsContainer />
     </Responsive>
   );
 };
